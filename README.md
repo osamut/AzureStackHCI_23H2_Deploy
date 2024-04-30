@@ -7,12 +7,15 @@
 - サーバーのスペックはサイジングツールで概要を把握し、ベンダーと細かな要件を詰めながら調整する
   -　 https://azurestackhcisolutions.azure.microsoft.com/#/sizer 
 - その他の要件も確認し、準備に利用する
-  - 物理ネットワーク要件：https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/physical-network-requirements?tabs=overview%2C23H2reqs
-  - ホストネットワーク要件：https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/host-network-requirements
-  - ファイアウォール要件：https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/firewall-requirements
+  - 物理ネットワーク要件：
+    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/physical-network-requirements?tabs=overview%2C23H2reqs
+  - ホストネットワーク要件：
+    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/host-network-requirements
+  - ファイアウォール要件：
+    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/firewall-requirements
 - 導入するハードウェアが Azure Stack HCI セキュリティのどこまで対応しているのかを確認しておく
-　- Azure Stack HCI 展開時に各種セキュリティ設定の有効・無効を聞かれるため事前に確認
   - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/security-features
+  - Azure Stack HCI 展開時に各種セキュリティ設定の有効・無効を聞かれるため事前に確認
   - 導入するハードウェアがすべて対応していることが望ましい　 ※特にTPM の有無
 - (オプション) 環境チェッカーツールを利用した環境の事前評価
   - 展開中にも行われるため必須ではないが、作業を開始する前に事前チェックも可能
