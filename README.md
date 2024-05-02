@@ -22,27 +22,29 @@
   - https://learn.microsoft.com/ja-jp/azure-stack/hci/manage/use-environment-checker?tabs=connectivity
 
 ## Azure Stack HCI ハードウェア環境設定とOSインストール
-    Azure Stack HCI ハードウェアセットアップと ToR スイッチ設定　・・・環境に合わせて VLAN なども設定しておく
-    Azure ポータルにアクセスし、検索ボックスに[Azure Stack HCI]と入力、[Azure Stack HCI 管理画面]を表示する
-    Azure ポータルのAzure Stack HCI管理画面から Azure Stack HCI OS の英語版の ISOイメージをダウンロード　～不要なローカライズの不具合を回避するため～
-    IDRACにて各ノードにアクセスし、Azure Stack HCI OS ISO をマウント
-    IDRACのLife Controllerにて Windows Server 2022 ドライバーを使って Azure Stack HCI OSをインストール
-    　# OSのインストール画面は Windows Server とほぼ同じなので迷うことはないはず
-    　# ISO から直接起動して Azure Stack HCI OSをインストールし、DELL サイトからダウンロードした最新の NICドライバーをインストールしてもよい
-        　# ダウンロードしたドライバーを含むフォルダーを共有しておき、Azure Stack HCI ノードから net use v: \\コンピュータ名\共有名 などで接続、ドライバーのインストールを行う
-          # QLogix、Mellanox はドライバーのセットアップexeを起動すると Azure Stack HCI OS 上でも GUI が表示され、インストールが可能だった
-        　# インストール終了後、net use v: /delete などでマップを削除しておく
-    IDRACにてISOイメージをアンマウントしておく　・・・マウントしたままだと Azure Stack HCI 展開中のBitLocker暗号化の画面で進まなくなることがわかっている
+
+- Azure Stack HCI ハードウェアセットアップと ToR スイッチ設定　・・・環境に合わせて VLAN なども設定してお
+- Azure ポータルにアクセスし、検索ボックスに[Azure Stack HCI]と入力、[Azure Stack HCI 管理画面]を表示する
+- Azure ポータルのAzure Stack HCI管理画面から Azure Stack HCI OS の英語版の ISOイメージをダウンロード　～不要なローカライズの不具合を回避するため～
+- IDRACにて各ノードにアクセスし、Azure Stack HCI OS ISO をマウント
+- IDRACのLife Controllerにて Windows Server 2022 ドライバーを使って Azure Stack HCI OSをインストール
+  - OSのインストール画面は Windows Server とほぼ同じなので迷うことはないはず
+  - ISO から直接起動して Azure Stack HCI OSをインストールし、DELL サイトからダウンロードした最新の NICドライバーをインストールしてもよい
+    - ダウンロードしたドライバーを含むフォルダーを共有しておき、Azure Stack HCI ノードから net use v: \\コンピュータ名\共有名 などで接続、ドライバーのインストールを行う
+    - QLogix、Mellanox はドライバーのセットアップexeを起動すると Azure Stack HCI OS 上でも GUI が表示され、インストールが可能だった
+    - インストール終了後、net use v: /delete などでマップを削除しておく
+- IDRACにてISOイメージをアンマウントしておく　※ マウントしたままだと Azure Stack HCI 展開中のBitLocker暗号化の画面で進まなくなることがわかっている
     
 ## Azure Stack HCI OSインストール後の設定
-    OSインストール後にパスワード設定画面が出てくるので、適切なパスワードを入力、Sconfig の画面が表示される
+
+- OSインストール後にパスワード設定画面が出てくるので、適切なパスワードを入力、Sconfig の画面が表示される
     # SConfig での設定
         9 [Date and time] にて[Internet Time]タブを開き、time.windows.comと同期できていることを確認　－ 通信できない場合は社内のタイムサーバーと同期する必要あり
         7 [Remote desktop] にてリモートデスクトップを Enabled に変更　～リモートデスクトップだとコピー＆ペーストが可能で、生産性が上がるため　・・・Azure Stack HCI展開後は自動でDisableになる
         8 [Network settings] にて管理用のNICにIPアドレスを設定
             # DHCPからIPをもらっている複数のNICがある場合、番号の小さいIPアドレスを管理用にするとよさそう　[静的IPアドレス][サブネットマスク][デフォルトゲートウェイ]の設定後、[DNSサーバー]を追加設定
         2 [Computer name] にてコンピュータ名を変更し、再起動
-    NIC の名前設定や DHCP 無効化などを行う
+   # NIC の名前設定や DHCP 無効化などを行う
         # リモートデスクトップ mstsc.exe にて各ノードにリモートアクセス　　管理者名は コンピュータ名￥administrator 　パスワードはインストール後に設定したものを利用
             # 通信がうまく行かない場合は 4 [Remote management] にて ping を有効にして確認するなども検討する
             Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOrigin　　・・・現時点でのNICの状態を確認
