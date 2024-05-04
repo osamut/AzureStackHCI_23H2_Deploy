@@ -332,4 +332,4 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 
 
 
-__[Azure Stack HCI 23H2 展開後の作業はこちら](/toCreateVMs)__
+__[Azure Stack HCI 23H2 展開後の作業はこちら](/toCreateVMs.md)__
