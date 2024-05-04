@@ -1,28 +1,26 @@
 # AzureStackHCI_23H2 展開方法　－DELLサーバー編
 
-## 1. Azure Stack HCI の要件を満たすサーバーやNIC、スイッチなどのハードウェアの準備
+## 1. Azure Stack HCI の要件を満たすサーバーや NIC、スイッチなどのハードウェアの準備
+<details>
 
 - 要件を確実に満たすため、専門家に相談しつつ、Azure Stack HCI カタログからハードウェアを選択する
   -  https://azurestackhcisolutions.azure.microsoft.com/#/catalog
 - サーバーのスペックはサイジングツールで概要を把握し、ベンダーと細かな要件を詰めながら調整する
   -　 https://azurestackhcisolutions.azure.microsoft.com/#/sizer 
 - その他の要件も確認し、準備に利用する
-  - 物理ネットワーク要件：
-    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/physical-network-requirements?tabs=overview%2C23H2reqs
-  - ホストネットワーク要件：
-    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/host-network-requirements
-  - ファイアウォール要件：
-    - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/firewall-requirements
-- 導入するハードウェアが Azure Stack HCI セキュリティのどこまで対応しているのかを確認しておく
-  - https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/security-features
-  - Azure Stack HCI 展開時に各種セキュリティ設定の有効・無効を聞かれるため事前に確認
+  - [物理ネットワーク要件](https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/physical-network-requirements?tabs=overview%2C23H2reqs)
+  - [ホストネットワーク要件](https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/host-network-requirements)
+  - [ファイアウォール要件](https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/firewall-requirements)
+- 導入するハードウェアの Azure Stack HCI セキュリティ対応状況の確認
+  - Azure Stack HCI 展開時に[各種セキュリティ設定](https://learn.microsoft.com/ja-jp/azure-stack/hci/concepts/security-features)の有効・無効を聞かれるため事前に確認
   - 導入するハードウェアがすべて対応していることが望ましい　 ※特にTPM の有無
 - (オプション) 環境チェッカーツールを利用した環境の事前評価
-  - 展開中にも行われるため必須ではないが、作業を開始する前に事前チェックも可能
-  - https://learn.microsoft.com/ja-jp/azure-stack/hci/manage/use-environment-checker?tabs=connectivity
+  - [展開中にも行われるため必須ではないが、作業を開始する前に事前チェックも可能](https://learn.microsoft.com/ja-jp/azure-stack/hci/manage/use-environment-checker?tabs=connectivity)
+</details>
 
-## Azure Stack HCI ハードウェア環境設定とOSインストール
-
+## 2. Azure Stack HCI ハードウェア環境設定とOSインストール
+<details>
+	
 - Azure Stack HCI ハードウェアセットアップと ToR スイッチ設定
 	- 環境に合わせて VLAN なども設定しておく
 	- 今回の構成はこのような状態
@@ -37,10 +35,12 @@
     - インストール終了後、「net use v: /delete」などでマウントを解除しておく
 - IDRAC にて ISO イメージをアンマウントしておく
 	- マウントしたままだと Azure Stack HCI 展開中の BitLocker 暗号化の画面で進まなくなることがわかっている
+</details>
     
-## Azure Stack HCI OS インストール後の設定
-
-### 1: OSVインストール後にパスワード設定画面が出てくるので、適切なパスワードを入力 ※Sconfig の画面へ遷移
+## 3. Azure Stack HCI OS インストール後の設定
+<details>
+	
+### 1: OSインストール後にパスワード設定画面が出てくるので、適切なパスワードを入力 ※Sconfig の画面へ遷移
 ### 2: SConfig での設定
 - 9 の [Date and time] にて [Internet Time] タブを開き、time.windows.com と同期できていることを確認
 	- 通信できない場合は社内のタイムサーバーと同期する必要あり
@@ -122,8 +122,11 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 ```
 　pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 ```
+</details>
 
-## Azure Stack HCI 展開用の Active Directry 事前設定
+## 4. Azure Stack HCI 展開用の Active Directry 事前設定
+<details>
+	
 **※ Active Directry に管理者としてアクセスできるマシンであればどこからでも実施可能**
 - Active Directory に作成する OU 名と新規追加する展開用のユーザー名、パスワードを決める
 	- 既存 OU 名の指定、既存ユーザー名の入力も可能だが、以下のようにAzure Stack HCI に最適化されることになる
@@ -144,8 +147,11 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 　New-HciAdObjectsPreCreation -AzureStackLCMUserCredential (Get-Credential) -AsHciOUName $NewOU
 ```
 -  [Active Directory ユーザーとコンピュータ] ツールにて 新しい OU と展開用のユーザーができていることを確認
-
-## Azureポータルでの作業
+</details>
+	
+## 5. Azureポータルでの作業
+<details>
+	
 - Azure ポータル(https://portal.azure.com) にログオン
 - Azure ポータルを英語に変更
 	- 不要なトラブルを回避するため
@@ -161,8 +167,11 @@ __セットアップ時にノードが数回 再起動するため、再起動�
   		- Microsoft.GuestConfiguration
 		- Microsoft.HybridConnectivity
   		- Microsoft.AzureStackHCI
+</details>
 
-## Azure Stack HCI 各ノードを Azure Arc で Azure と接続
+## 6. Azure Stack HCI 各ノードを Azure Arc で Azure と接続
+<details>
+	
 ### 各 Azure Stack HCI ノードを Azure Arc に登録するための手順１　モジュールのインストール
 - PSGallery を信頼できるリポジトリとして登録 　・・・入力を求められたら Y を入力し処理を継続
 ```
@@ -237,8 +246,11 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 　$id = (Get-AzContext).Account.Id
 　Remove-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
 ```
+</details>
 
-## Azure Stack HCI クラスター展開
+## 7. Azure Stack HCI クラスター展開
+<details>
+	
 ### 事前設定
 - Azure ポータルが英語であることを確認  ・・・不要なトラブルを回避するため
 - サブスクリプションに対し、Azure 側の作業をするアカウントに以下の管理権限を付与
@@ -316,5 +328,8 @@ __セットアップ時にノードが数回 再起動するため、再起動�
    - OS の更新やドメイン参加を含め Azure Stack HCI 23H2 クラスター作成作業が自動で行われ、終了すると Azure から管理可能な状態になる
    - 途中エラーが出た場合はログを確認するなどして対処し [Rerun deployment] を実施
    - 現時点では、何度か再起動が行われるため Remote NDIS Device を削除するなどの作業が都度必要になる
+</details>
 
->>> Azure Stack HCI 23H2 展開後の作業はこちら
+
+
+__[Azure Stack HCI 23H2 展開後の作業はこちら](/toCreateVMs)
