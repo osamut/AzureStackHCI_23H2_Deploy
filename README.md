@@ -311,8 +311,10 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 - 9-2: [Start Validation] をクリック
 - 9-3: 更に 11 個のチェックが行われ Validation が完了したら [Next: Preview + Create] をクリック
 #### 10. [Create] をクリックし、Azure Stack HCI Cluster Deployment を開始
-   - 画面が Azure Stack HCI 管理画面の ”Settings” にある「Deployments」が選択された状態に遷移するので [Refresh] をクリックして状況を確認
-   - 手元の 2 ノードで 2 時間半程度かかるが、OS の更新やドメイン参加を含め Azure Stack HCI 23H2 クラスター作成作業が自動で行われ、終了すると Azure から管理可能な状態になる
-   - 途中エラーが出た場合はログを確認するなどして対処し[Rerun deployment] を実施
-   - 何度か再起動が行われるため Remote NDIS Device を削除するなどの作業が必要になる  ※現時点
+   - 画面が Azure Stack HCI 管理画面の ”Settings” にある「Deployments」が選択された状態に遷移するので [Refresh] をクリックして状況を確認できる
+   - 手元の 2 ノードで 2 時間半程度かかった
+   - OS の更新やドメイン参加を含め Azure Stack HCI 23H2 クラスター作成作業が自動で行われ、終了すると Azure から管理可能な状態になる
+   - 途中エラーが出た場合はログを確認するなどして対処し [Rerun deployment] を実施
+   - 現時点では、何度か再起動が行われるため Remote NDIS Device を削除するなどの作業が都度必要になる
 
+>>> Azure Stack HCI 23H2 展開後の作業はこちら
