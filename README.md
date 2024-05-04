@@ -1,7 +1,9 @@
 # AzureStackHCI_23H2 展開方法　－DELLサーバー編
 
 ## 0. 本手順が想定しているネットワーク構成図
-![image](https://github.com/osamut/AzureStackHCI_23H2/assets/1791583/d098117d-08b2-411a-8b5c-c1aab3bd190b)
+![image](https://github.com/osamut/AzureStackHCI_23H2/assets/1791583/8c009dd9-d86e-4931-bcb7-a60e1534df88)
+
+
 
 
 
