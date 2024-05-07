@@ -1,11 +1,10 @@
-# AzureStackHCI_23H2 展開方法　－DELLサーバー編
+# AzureStackHCI_23H2 展開方法
 
 ## 0. 本手順が想定しているネットワーク構成図
+<details>
+
 ![image](https://github.com/osamut/AzureStackHCI_23H2/assets/1791583/8c009dd9-d86e-4931-bcb7-a60e1534df88)
-
-
-
-
+</details>
 
 ## 1. Azure Stack HCI の要件を満たすサーバーや NIC、スイッチなどのハードウェアの準備
 <details>
@@ -33,14 +32,14 @@
 	- 今回の構成はこのような状態
 - Azure ポータルにアクセスし、検索ボックスに [Azure Stack HCI] と入力、[Azure Stack HCI 管理画面] を表示する
 - Azure ポータルの Azure Stack HCI 管理画面から Azure Stack HCI OS の英語版の ISO イメージをダウンロード　～不要なローカライズの不具合を回避するため～
-- IDRAC にて各ノードにアクセスし、Azure Stack HCI OS ISO をマウント
-- IDRAC の Life Controller にて Windows Server 2022 ドライバーを使って Azure Stack HCI OS をインストール
+- IDRAC など物理サーバー管理ツールのコンソールにて各ノードにアクセスし、Azure Stack HCI OS ISO をマウント
+- IDRAC の場合は Life Controller にて Windows Server 2022 ドライバーを使って Azure Stack HCI OS をインストール
   - OS のインストール画面は Windows Server とほぼ同じなので迷うことはないはず
-  - ISO から直接起動して Azure Stack HCI OSをインストールし、DELL サイトからダウンロードした最新の NICドライバーをインストールしてもよい
-    - ダウンロードしたドライバーを含むフォルダーを共有しておき、Azure Stack HCI ノードから「net use v: \\コンピュータ名\共有名」などで接続、ドライバーのインストールを行う
+  - ISO から直接起動して Azure Stack HCI OS をインストールし、サーバーベンダーのサイトからダウンロードした最新の NIC ドライバーをインストールしてもよい
+    - 管理用マシンなどでダウンロードしたドライバーを含むフォルダーを共有しておき、Azure Stack HCI ノードから「net use v: \\コンピュータ名\共有名」などで接続、ドライバーのインストールを行う
     - QLogix、Mellanox はドライバーのセットアップ exe を起動すると Azure Stack HCI OS 上でも GUI が表示され、インストールが可能だった
     - インストール終了後、「net use v: /delete」などでマウントを解除しておく
-- IDRAC にて ISO イメージをアンマウントしておく
+- 物理サーバー管理ツールにて ISO イメージをアンマウントしておく
 	- マウントしたままだと Azure Stack HCI 展開中の BitLocker 暗号化の画面で進まなくなることがわかっている
 </details>
     
@@ -338,5 +337,6 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 </details>
 
 
-
+<!--
 __[Azure Stack HCI 23H2 展開後の作業はこちら](/toCreateVMs.md)__
+-->
