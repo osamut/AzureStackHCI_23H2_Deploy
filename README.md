@@ -155,7 +155,7 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 -  [Active Directory ユーザーとコンピュータ] ツールにて 新しい OU と展開用のユーザーができていることを確認
 </details>
 	
-## 5. Azureポータルでの作業
+## 5. Azureポータルでの事前作業
 <details>
 	
 - Azure ポータル(https://portal.azure.com) にログオン
