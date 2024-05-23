@@ -183,15 +183,15 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 ```
 　Register-PSRepository -Default -InstallationPolicy Trusted
 ```
+- その他 必要な PowerShell モジュールのインストール
+```
+ Install-Module Az.Accounts -RequiredVersion 2.13.2
+ Install-Module Az.ConnectedMachine -RequiredVersion 0.5.2
+ Install-Module Az.Resources -RequiredVersion 6.12.0
+```
 - Azure Arc 登録用のモジュールをインストール　・・・入力を求められたら All の A を入力
 ```
 　Install-Module AzsHCI.ARCinstaller
-```
-- その他 必要な PowerShell モジュールのインストール
-```
-　Install-Module Az.Accounts -Force
-　Install-Module Az.ConnectedMachine -Force
-　Install-Module Az.Resources -Force
 ```
 
 ### 各 Azure Stack HCI ノードを Azure Arc に登録するための手順２　登録に必要な情報の入力と収集
