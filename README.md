@@ -261,7 +261,6 @@ Remove-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup 
 - Azure ポータルが英語であることを確認  ・・・不要なトラブルを回避するため
 - サブスクリプションに対し、Azure 側の作業をするアカウントに以下の管理権限を付与
 	- Azure Stack HCI Administrator
- 	- Cloud Application Administrator
   	- Reader
  - リソースグループに対し、Azure 側の作業をするアカウントに以下の管理権限を付与
  	- Key Vault Data Access Administrator
