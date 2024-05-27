@@ -63,19 +63,19 @@
 -  ノード間通信の確認などが必要な場合は Sconfig 4 の [Remote management] にて ping を有効にして確認するなども検討
 -  現時点での NIC の状態を確認
 ```
-　Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOrigin
+Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOrigin
 ```
 ```
-　--結果例--
-　InterfaceAlias　　　　　　　 　IPAddress　　　　PrefixOrigin
-  --------------　　　　 　　　　---------　　　　　------------
-  NIC2　　　　　　　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
-  NIC1　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
-  SLOT 3 Port 2　　　　　　　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
-  SLOT 3 Port 1　　　　　　　　　169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
-  Ethernet　　　　　　　　　　　　169.254.1.2　　　　 Dhcp　　　　　・・・サーバーの USB とホストをつなぐために利用
-　Loopback Pseudo-Interface 1　  127.0.0.1　　　　　 WellKnown     ・・・今回は気にしなくてよい        
-  --------
+--結果例--
+InterfaceAlias　　　　　　　 　IPAddress　　　　PrefixOrigin
+ --------------　　　　 　　　　---------　　　　　------------
+NIC2　　　　　　　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
+NIC1　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
+SLOT 3 Port 2　　　　　　　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
+SLOT 3 Port 1　　　　　　　　　169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
+Ethernet　　　　　　　　　　　　169.254.1.2　　　　 Dhcp　　　　　・・・サーバーの USB とホストをつなぐために利用
+Loopback Pseudo-Interface 1　  127.0.0.1　　　　　 WellKnown     ・・・今回は気にしなくてよい        
+--------
 ```
   **※Ethernet = Ethernet Remote NDIS Compatible Device ・・・後で無効化しないと悪さする**
 		
@@ -84,24 +84,24 @@
  	- 既存環境の NIC 名を使って正しく設定する必要あり
 - 最初に手動で IP アドレス設定をした管理用 NIC の名前を MGMT_VM1 に変更
 ```
-　Rename-NetAdapter -Name "NIC1" -NewName "MGMT_VM1"
+Rename-NetAdapter -Name "NIC1" -NewName "MGMT_VM1"
 ```
  - それ以外の 3 つの NIC の名前変更
 ```
-　Rename-NetAdapter -Name "NIC2" -NewName "MGMT_VM2"`
-　Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
-　Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
+Rename-NetAdapter -Name "NIC2" -NewName "MGMT_VM2"`
+Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
+Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
 ```
 - 手動設定していない NIC の DHCP を無効化
 ```
-　Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
-　Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
-　Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
 ```
 - NIC に OS 標準のドライバー(Inbox Driver)が残っていないことを確認する
 	- 各ノードで以下のコマンドを実行し、 DriverProvider に Microsoft が無いことを確認
 ```
-　Get-NetAdapter -Name * | Select *Driver*
+Get-NetAdapter -Name * | Select *Driver*
 ```
 - Ethernet Remote NDIS Compatible Device という Inbox Driver になっている NIC が存在する可能性あり
 - そちらについては以下を参照し対処が必要
@@ -121,12 +121,12 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 	- Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6
 - 各ノードに対して Hyper-V を有効化
 ```
-　Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 ```
 - 再起動
 - 再起動後 リモートデスクトップで再接続し、以下を実行して Enternet Remote NDIS Compatible Device を再度無効化
 ```
-　pnputil /remove-device "USB\VID_413C&PID_A102\5678"
+pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 ```
 </details>
 
@@ -141,16 +141,16 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 	- 展開用ユーザーのパスワードは12 文字以上で、小文字、大文字、数字、特殊文字を含む必要あり
 - ツールのインストール
 ```
-　Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force
+Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force
 ```
 -  作成する OU 名を OU=xx,DC=xxx,DC=xxx という形式で $NewOU に代入
 ```
-　$NewOU = "作成する OU 名"
+$NewOU = "作成する OU 名"
 ```
 - Active Directory に新規 OU と展開用のユーザーID を作成
 - __以下のコマンドを実行すると、ユーザー名とパスワードを入力する画面がポップアップしてくるので、事前に決めた情報を入力__
 ```
-　New-HciAdObjectsPreCreation -AzureStackLCMUserCredential (Get-Credential) -AsHciOUName $NewOU
+New-HciAdObjectsPreCreation -AzureStackLCMUserCredential (Get-Credential) -AsHciOUName $NewOU
 ```
 -  [Active Directory ユーザーとコンピュータ] ツールにて 新しい OU と展開用のユーザーができていることを確認
 </details>
@@ -181,54 +181,54 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 ### 各 Azure Stack HCI ノードを Azure Arc に登録するための手順１　モジュールのインストール
 - PSGallery を信頼できるリポジトリとして登録 　・・・入力を求められたら Y を入力し処理を継続
 ```
-　Register-PSRepository -Default -InstallationPolicy Trusted
+Register-PSRepository -Default -InstallationPolicy Trusted
 ```
 - その他 必要な PowerShell モジュールのインストール
 ```
- Install-Module Az.Accounts -RequiredVersion 2.13.2
- Install-Module Az.ConnectedMachine -RequiredVersion 0.5.2
- Install-Module Az.Resources -RequiredVersion 6.12.0
+Install-Module Az.Accounts -RequiredVersion 2.13.2
+Install-Module Az.ConnectedMachine -RequiredVersion 0.5.2
+Install-Module Az.Resources -RequiredVersion 6.12.0
 ```
 - Azure Arc 登録用のモジュールをインストール　・・・入力を求められたら All の A を入力
 ```
-　Install-Module AzsHCI.ARCinstaller
+Install-Module AzsHCI.ARCinstaller
 ```
 
 ### 各 Azure Stack HCI ノードを Azure Arc に登録するための手順２　登録に必要な情報の入力と収集
 - Azure サブスクリプション ID を指定　・・・Azure ポータルのサブスクリプション管理画面から入手可能
 ```
-　$Subscription = "利用するサブスクリプションID"
+$Subscription = "利用するサブスクリプションID"
 ```
 - リソースグループ名を指定
 ```
-　$RG = "利用するリソースグループ名"
+$RG = "利用するリソースグループ名"
 ```
 - テナント ID を指定　・・・ Azure ポータルの Microsoft Entra ID 管理画面から入手可能
 ```
-　$Tenant = "利用するテナントID"
+$Tenant = "利用するテナントID"
 ```
 - [サポートされている Azure リージョン](https://learn.microsoft.com/en-us/azure-stack/hci/concepts/system-requirements-23h2#azure-requirements)を指定 (Japan East も可能になりました)
 ```
-　$Region = "Japan East"
+$Region = "Japan East"
 ```
 - デバイスコードを使ってサブスクリプションにログオン認証を実施
 	- Azure Stack HCI が Server Core ベースでログオンのポップアップが出せないため、他のマシンのブラウザーで https://login.microsoftonline.com/common/oauth2/deviceauth にアクセスし、Azure Stack HCI 画面に表示されたコードを使って Azure ユーザーをログオンさせている
 ```
-　Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
+Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
 ```
 - ログオンした Azure ユーザーのトークンを取得
 ```
-　$ARMtoken = (Get-AzAccessToken).Token
+$ARMtoken = (Get-AzAccessToken).Token
 ```
 - Arc に登録するためのアカウントの ID を取得
 ```
-　$id = (Get-AzContext).Account.Id
+$id = (Get-AzContext).Account.Id
 ```
 
 ### 各 Azure Stack HCI ノードを Azure Arc に登録するための手順３　実際の登録作業
 - 上記で入力、取得した情報を使って Azure Arc に登録
 ```
-　Invoke-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Region $Region -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
+Invoke-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Region $Region -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
 ```
 - Azure Stack HCI の画面で登録完了を確認
 - Azure ポータルの [Azure Arc] - [Machines] にて、登録作業を行った Azure Stack HCI マシン名をクリック
@@ -244,13 +244,13 @@ __セットアップ時にノードが数回 再起動するため、再起動�
 	- Azure Stack HCI クラスター展開がうまく進まなかったり、Azure から Azure Stack HCI クラスターを削除した場合、Azure Arc 管理画面から Azure Stack HCI ノードも削除されることになる
 	- しかし、Azure Stack HCI 各ノードには既に設定された情報が残っているため、以下のコマンドを使って削除を行う
 ```
-　$Subscription = "利用するサブスクリプションID"
-　$RG = "利用するリソースグループ名"
-　$Tenant = "利用するテナントID"
-　Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
-　$ARMtoken = (Get-AzAccessToken).Token
-　$id = (Get-AzContext).Account.Id
-　Remove-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
+$Subscription = "利用するサブスクリプションID"
+$RG = "利用するリソースグループ名"
+$Tenant = "利用するテナントID"
+Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
+$ARMtoken = (Get-AzAccessToken).Token
+$id = (Get-AzContext).Account.Id
+Remove-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
 ```
 </details>
 
