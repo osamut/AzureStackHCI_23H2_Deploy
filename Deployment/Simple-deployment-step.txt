@@ -1,12 +1,6 @@
 ### ISO のアンマウント
 
-### Driver Setup 用の共有ドライブマウント方法とアンマウント方法
-net use v: \\コンピュータ名\共有名
-net use v: /delete
-```
-Get-NetAdapter -Name * | Select *Driver*
-
-### 2: SConfig での設定
+### SConfig での設定
 7[Remote desktop] 
 8[Network settings]
 9[Date and time]
@@ -30,6 +24,12 @@ Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
 Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
+
+### Driver Setup 用の共有ドライブマウント方法とアンマウント方法
+net use v: \\コンピュータ名\共有名
+net use v: /delete
+```
+Get-NetAdapter -Name * | Select *Driver*
 
 ### 各ノードに対して Hyper-V を有効化し再起動
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
