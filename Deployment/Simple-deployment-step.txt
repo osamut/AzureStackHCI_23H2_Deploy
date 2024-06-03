@@ -1,6 +1,10 @@
-### Driver Setup - マウント方法のみ
+### ISO のアンマウント
+
+### Driver Setup 用の共有ドライブマウント方法とアンマウント方法
 net use v: \\コンピュータ名\共有名
 net use v: /delete
+```
+Get-NetAdapter -Name * | Select *Driver*
 
 ### 2: SConfig での設定
 7[Remote desktop] 
@@ -11,7 +15,7 @@ net use v: /delete
 ### NIC の名前設定や DHCP 無効化
 Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOrigin
 --結果例--
-NIC2　　　　　　　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
+NIC2　　　　　　      　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
 NIC1　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
 SLOT 3 Port 2　　　　　　　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
 SLOT 3 Port 1　　　　　　　　　169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
@@ -22,17 +26,16 @@ Rename-NetAdapter -Name "SLOT 1 Port 1" -NewName "MGMT_VM1"
 Rename-NetAdapter -Name "SLOT 1 Port 2" -NewName "MGMT_VM2"`
 Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
 Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
+
 Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
-```
-Get-NetAdapter -Name * | Select *Driver*
-```
-###各ノードに対して Hyper-V を有効化
+
+### 各ノードに対して Hyper-V を有効化し再起動
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
-```
+### プラグランドプレイのEthernetを無効化
 pnputil /remove-device "USB\VID_413C&PID_A102\5678"
-```
+
 ## 4. Azure Stack HCI 展開用の Active Directry 事前設定
 
 ## 5. Azureポータルでの事前作業
