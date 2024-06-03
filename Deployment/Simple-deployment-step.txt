@@ -1,0 +1,69 @@
+### Driver Setup - マウント方法のみ
+net use v: \\コンピュータ名\共有名
+net use v: /delete
+
+### 2: SConfig での設定
+7[Remote desktop] 
+8[Network settings]
+9[Date and time]
+2[Computer name] 
+
+### NIC の名前設定や DHCP 無効化
+Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOrigin
+--結果例--
+NIC2　　　　　　　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
+NIC1　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
+SLOT 3 Port 2　　　　　　　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
+SLOT 3 Port 1　　　　　　　　　169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
+Ethernet　　　　　　　　　　　　169.254.1.2　　　　 Dhcp　　　　　・・・サーバーの USB とホストをつなぐために利用
+Loopback Pseudo-Interface 1　  127.0.0.1　　　　　 WellKnown     ・・・今回は気にしなくてよい        
+--------
+Rename-NetAdapter -Name "SLOT 1 Port 1" -NewName "MGMT_VM1"
+Rename-NetAdapter -Name "SLOT 1 Port 2" -NewName "MGMT_VM2"`
+Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
+Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
+Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
+```
+Get-NetAdapter -Name * | Select *Driver*
+```
+###各ノードに対して Hyper-V を有効化
+Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+```
+pnputil /remove-device "USB\VID_413C&PID_A102\5678"
+```
+## 4. Azure Stack HCI 展開用の Active Directry 事前設定
+
+## 5. Azureポータルでの事前作業
+- Azure ポータルを英語に変更
+- リソースグループ作成と管理権限を付与
+Azure Connected Machine Onboarding
+Azure Connected Machine Resource Administrator
+Key Vault Data Access Administrator
+Key Vault Secrets Officer
+Key Vault Contributor
+Storage Account Contributor
+- サブスクリプションに対する管理権限を付与
+Azure Stack HCI Administrator
+Reader
+
+## 6. Azure Stack HCI 各ノードを Azure Arc で Azure と接続
+Register-PSRepository -Default -InstallationPolicy Trusted
+Install-Module Az.Accounts -RequiredVersion 2.13.2
+Install-Module Az.ConnectedMachine -RequiredVersion 0.5.2
+Install-Module Az.Resources -RequiredVersion 6.12.0
+Install-Module AzsHCI.ARCinstaller
+$Subscription = "利用するサブスクリプションID"
+$RG = "利用するリソースグループ名"
+$Tenant = "利用するテナントID"
+$Region = "East us"
+Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
+$ARMtoken = (Get-AzAccessToken).Token
+$id = (Get-AzContext).Account.Id
+Invoke-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup $RG -TenantID $Tenant -Region $Region -Cloud "AzureCloud" -ArmAccessToken $ARMtoken -AccountID $id
+
+### Azure ポータルの Azure Arc マシン管理画面にて [Extensions] をクリックし、以下の 4 つの拡張機能の追加が成功するのを待つ
+
+## 7. Azure Stack HCI クラスター展開
+   - 現時点では、何度か再起動が行われるため Remote NDIS Device を削除するなどの作業が都度必要になる
