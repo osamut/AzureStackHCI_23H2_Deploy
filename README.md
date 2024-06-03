@@ -43,20 +43,20 @@
 	- マウントしたままだと Azure Stack HCI 展開中の BitLocker 暗号化の画面で進まなくなることがわかっている
 </details>
     
-## 3. Azure Stack HCI OS インストール後の設定
+## 3. Azure Stack HCI OS インストール後の設定 ※各ノードにて実施
 <details>
 	
 ### 1: OSインストール後にパスワード設定画面が出てくるので、適切なパスワードを入力 ※Sconfig の画面へ遷移
 ### 2: SConfig での設定
-- 9 の [Date and time] にて [Internet Time] タブを開き、time.windows.com と同期できていることを確認
-	- 通信できない場合は社内のタイムサーバーと同期する必要あり
 - 7 の [Remote desktop] にてリモートデスクトップを Enabled に変更
 	- リモートデスクトップだとコピー＆ペーストが容易で、作業の生産性が上がるため
 	- Azure Stack HCI 展開後は自動で Disable にしてくれる
-- ８の [Network settings] にて管理用の NIC に IP アドレスを設定
+- 8の [Network settings] にて管理用の NIC に IP アドレスを設定
 	- DHCP から IP をもらっている複数の NIC がある場合、番号の小さい IP アドレスを管理用にするとよさそう
 	- [静的IPアドレス] [サブネットマスク] [デフォルトゲートウェイ] の設定後、[DNS サーバー] を追加設定
-- ２の [Computer name] にてコンピュータ名を変更し、再起動
+- 9 の [Date and time] にて [Internet Time] タブを開き、time.windows.com と同期できていることを確認
+	- 通信できない場合は社内のタイムサーバーと同期する必要あり
+- 2 の [Computer name] にてコンピュータ名を変更し、再起動
 ### 3: NIC の名前設定や DHCP 無効化などを行う
 - リモートデスクトップ mstsc.exe にて各ノードにリモートアクセス
 	- 管理者名は コンピュータ名￥administrator 　パスワードはインストール後に設定したものを利用
@@ -108,7 +108,7 @@ Get-NetAdapter -Name * | Select *Driver*
 	- [Enternet Remote NDIS Compatible Device という NIC について](https://www.dell.com/support/kbdoc/ja-jp/000130077/poweredge-idrac-%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88-%E6%A9%9F%E8%83%BD-%E3%81%AE-%E4%BD%BF%E7%94%A8-%E6%96%B9%E6%B3%95)
  	- pnputil /enum-devices /ids /class net コマンドにて Network Device の Instance ID を確認し、入手したInstance ID を利用して NDIS Compatible Device を削除
 ```
-　pnputil /remove-device "USB\VID_413C&PID_A102\5678"
+pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 ```
 __プラグ＆プレイデバイスのためノード再起動後に Enternet Remote NDIS Compatible Device は自動復活する__
 
