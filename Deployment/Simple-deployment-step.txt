@@ -25,6 +25,9 @@ Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
 
+### IPv6 無効化
+Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6
+
 ### Driver Setup 用の共有ドライブマウント方法とアンマウント方法
 net use v: \\コンピュータ名\共有名
 net use v: /delete
