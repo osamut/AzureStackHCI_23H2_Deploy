@@ -17,9 +17,9 @@ Ethernet　　　　　　　　　　　　169.254.1.2　　　　 Dhcp　　�
 Loopback Pseudo-Interface 1　  127.0.0.1　　　　　 WellKnown     ・・・今回は気にしなくてよい        
 --------
 Rename-NetAdapter -Name "SLOT 1 Port 1" -NewName "MGMT_VM1"
-Rename-NetAdapter -Name "SLOT 1 Port 2" -NewName "MGMT_VM2"`
-Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
-Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
+Rename-NetAdapter -Name "SLOT 1 Port 2" -NewName "MGMT_VM2"
+Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"
+Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"
 
 Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
