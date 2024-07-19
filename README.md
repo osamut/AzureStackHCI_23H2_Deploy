@@ -88,9 +88,9 @@ Rename-NetAdapter -Name "NIC1" -NewName "MGMT_VM1"
 ```
  - それ以外の 3 つの NIC の名前変更
 ```
-Rename-NetAdapter -Name "NIC2" -NewName "MGMT_VM2"`
-Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"`
-Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"`
+Rename-NetAdapter -Name "NIC2" -NewName "MGMT_VM2"
+Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"
+Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"
 ```
 - 手動設定していない NIC の DHCP を無効化
 ```
