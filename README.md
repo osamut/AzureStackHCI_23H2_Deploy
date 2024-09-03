@@ -161,7 +161,7 @@ Install-Module AsHciADArtifactsPreCreationTool -Repository PSGallery -Force
 ```
 -  作成する OU 名を OU=xx,DC=xxx,DC=xxx という形式で $NewOU に代入
 ```
-$NewOU = "作成する OU 名"
+$NewOU = "OU=xx,DC=xxx,DC=xxx"
 ```
 - Active Directory に新規 OU と展開用のユーザーID を作成
 - __以下のコマンドを実行すると、ユーザー名とパスワードを入力する画面がポップアップしてくるので、事前に決めた情報を入力__
