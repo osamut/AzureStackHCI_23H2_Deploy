@@ -140,7 +140,7 @@ pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
 ```
 - 再起動
-- 再起動後 リモートデスクトップで再接続し、以下を実行して Enternet Remote NDIS Compatible Device を再度無効化しておくと安心
+- 再起動後 リモートデスクトップで再接続し、以下を実行して Enternet Remote NDIS Compatible Device を無効化しておくと安心
 ```
 pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 ```
