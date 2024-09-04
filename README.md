@@ -68,31 +68,31 @@ Get-NetIPAddress -AddressFamily IPv4 | select InterfaceAlias,IPAddress,PrefixOri
 --結果例--
 InterfaceAlias　　　　　　　 　IPAddress　　　　PrefixOrigin
  --------------　　　　 　　　　---------　　　　　------------
-NIC2　　　　　　　　		10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
-NIC1　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
-SLOT 3 Port 2　　　　　　　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
-SLOT 3 Port 1　　　　　　　　　169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
+Port1			      10.29.146.4　　 　　Dhcp　　　　　・・・管理＋VM 通信用に利用するセカンダリNIC
+Port2　　　　　　　　　　　　 　10.29.146.13　　　  Manual　　　　・・・手動で IP 設定した管理用 NIC　管理＋VM 通信用に利用
+Port3　　　　　　	　　　169.254.222.78　　  WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC１
+Port4		　　　　　　　 169.254.123.122　　 WellKnown　　 ・・・Software Defined Storage 用の RDMA NIC２
 Ethernet　　　　　　　　　　　　169.254.1.2　　　　 Dhcp　　　　　・・・サーバーの USB とホストをつなぐために利用
 Loopback Pseudo-Interface 1　  127.0.0.1　　　　　 WellKnown     ・・・今回は気にしなくてよい        
 --------
 ```
 		
 - Azure Stack HCI の Network ATC (インテントベースのネットワーク管理)で利用するため、環境に合わせて NIC 名を変更
-	- 今回の環境で使う NIC 名が NIC1, NIC2, SLOT 3 Port 1, SLOT 3 Port 2 になっていることが前提で書いてある
+	- 今回の環境で使う NIC 名が Port1,Port2,Port3,Port4 になっていることが前提で書いてある
  	- 既存環境の NIC 名を使って正しく設定する必要あり
 - 最初に手動で IP アドレス設定をした管理用 NIC の名前を MGMT_VM1 に変更
 ```
-Rename-NetAdapter -Name "NIC1" -NewName "MGMT_VM1"
+Rename-NetAdapter -Name "Port1" -NewName "MGMT_VM1"
 ```
  - それ以外の 3 つの NIC の名前変更
 ```
-Rename-NetAdapter -Name "NIC2" -NewName "MGMT_VM2"
-Rename-NetAdapter -Name "SLOT 3 Port 1" -NewName "Storage1"
-Rename-NetAdapter -Name "SLOT 3 Port 2" -NewName "Storage2"
+Rename-NetAdapter -Name "Port2" -NewName "MGMT_VM2"
+Rename-NetAdapter -Name "Port3" -NewName "Storage1"
+Rename-NetAdapter -Name "Port4" -NewName "Storage2"
 ```
 - NIC の DHCP を無効化
 ```
-Get-NetAdapter -Name "MGMT_VM12" | Set-NetIPInterface -Dhcp Disabled
+Get-NetAdapter -Name "MGMT_VM1" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "MGMT_VM2" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage1" | Set-NetIPInterface -Dhcp Disabled
 Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
