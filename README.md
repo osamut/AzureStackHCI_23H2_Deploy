@@ -102,22 +102,15 @@ Get-NetAdapter -Name "Storage2" | Set-NetIPInterface -Dhcp Disabled
 	- 管理用マシンなどでダウンロードしたドライバーを含むフォルダーを共有しておき、Azure Stack HCI ノードから「net use v: \\コンピュータ名\共有名」などで接続、ドライバーのインストールを行う
 	- ドライバーのセットアップ exe を起動すると Azure Stack HCI OS 上でも GUI が表示され、インストールが可能だった
     - インストール終了後、「net use v: /delete」などでマウントを解除しておく
- 
-- IPv6 の無効化
-```
-Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip
-```
-
-- NIC に OS 標準のドライバー(Inbox Driver)が残っていないことを確認する
-	- 各ノードで以下のコマンドを実行し、 DriverProvider に Microsoft が無いことを確認
+- 各ノードで以下のコマンドを実行し、NIC に OS 標準のドライバー(Inbox Driver ＝ DriverProvider に Microsoft)が残っていないことを確認する
 ```
 Get-NetAdapter -Name * | Select *Driver*
 ```
 
 __※ Ethernet = Ethernet Remote NDIS Compatible Device という Inbox Driver NIC が存在する可能性あり　・・・対処が必要__
 - [Enternet Remote NDIS Compatible Device という NIC について](https://www.dell.com/support/kbdoc/ja-jp/000130077/poweredge-idrac-%E3%83%80%E3%82%A4%E3%83%AC%E3%82%AF%E3%83%88-%E6%A9%9F%E8%83%BD-%E3%81%AE-%E4%BD%BF%E7%94%A8-%E6%96%B9%E6%B3%95)
-- 対処方法１：以下のコマンドにて該当するクラスター検証時のエラーを回避
 
+- 対処方法１：以下のコマンドにて該当するクラスター検証時のエラーを回避
 ```
 # Exclude iRDAC USB NIC from cluster validation
 New-Item -Path HKLM:\system\currentcontrolset\services\clussvc
@@ -130,9 +123,15 @@ New-ItemProperty -Path HKLM:\system\currentcontrolset\services\clussvc\parameter
 ```
 pnputil /remove-device "USB\VID_413C&PID_A102\5678"
 ```
- 
-- Software Defined Storage 用の RDMA NIC には VLAN 設定が必須(VLAN 0 は不可)のため、クラスター作成時に VLAN ID を指定
-	- スイッチ経由でつながっている場合はスイッチ側の VLAN 設定を確認しておく
+
+- IPv6 の無効化
+```
+Disable-NetAdapterBinding -Name * -ComponentID ms_tcpip6
+```
+- VLAN 構成と NIC の関係を確認しておく
+	- Software Defined Storage 用の RDMA NIC には VLAN 設定が必須
+	- Azure Stack HCI 展開時にVLAN 強制適用で、VLAN 0 も不可
+	- よって、ストレージ用 NIC がスイッチ経由でつながっている場合はスイッチ側の VLAN 設定も行い、どの NIC と結線されているかを理解しておく
 	- クラスター作成後の NIC の VLAN 設定確認は Get-NetAdapter -Name * | fl にて可能
 
 - 各ノードに対して Hyper-V を有効化
