@@ -356,10 +356,11 @@ Remove-AzStackHciArcInitialization -SubscriptionID $Subscription -ResourceGroup 
 #### 10. [Create] をクリックし、Azure Stack HCI Cluster Deployment を開始
    - 画面が Azure Stack HCI 管理画面の ”Settings” にある「Deployments」が選択された状態に遷移するので [Refresh] をクリックして状況を確認できる
    - 手元の 2 ノードで 2 時間半程度かかった
+   - "Deploy Arc infrastructure components" ステップでエラーが出る場合 (HCIノードへの接続を繰り返し行いタイムアウト)、Failover Cluster Manager画面の自動作成されたResource Bridge VM のネットワーク設定にて、「Enable MAC address spoofing」を有効にし、「Protected network」を無効にすることでエラー回避可能
    - OS の更新やドメイン参加を含め Azure Stack HCI 23H2 クラスター作成作業が自動で行われ、終了すると Azure から管理可能な状態になる
    - 途中エラーが出た場合はログを確認するなどして対処し [Rerun deployment] を実施
 
-   -  "Deploy Arc infrastructure components" ステップでHCIノードへの接続を繰り返し行い、最後にタイムアウトしてしまう場合、Failover Cluster Managerにて自動作成されたResource Bridge VM のネットワーク設定にて、「Enable MAC address spoofing」を有効にし、「Protected network」を無効にすることでエラー回避可能
+
 </details>
 
 
