@@ -233,7 +233,7 @@ $Region = "Japan East"
 Connect-AzAccount -SubscriptionId $Subscription -TenantId $Tenant -DeviceCode
 ```
 
-- Azure Stack HCI Docsに記載はないが、ArmToken取得にエラーが発生する場合には以下のコマンドを実行 （Connect-AzAccountからやり直したほうが良いかも）
+- Azure Stack HCI Docsに記載はないが、ArmToken取得にエラーが発生する場合には以下のコマンドを実行 （エラーが出て再実行する際は　Connect-AzAccountからやり直したほうが良いかも）
 ```
 Update-AzConfig -EnableLoginByWam $false
 ```
